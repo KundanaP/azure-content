@@ -22,7 +22,7 @@ This article gives an overview of using Custom Script extension on Windows using
 
 
 Virtual Machine(VM) extensions built by Microsoft and trusted third party publishers to extend the functionality of the VM. For a detailed overview of VM Extensions, please refer to the
-<a href="https://msdn.microsoft.com/library/azure/dn606311.aspx" target="_blank">MSDN Documentation</a>.
+<a href="https://msdn.microsoft.com/en-us/library/azure/dn606311.aspx" target="_blank">MSDN Documentation</a>.
 
 ## Custom Script Extension Overview
 
@@ -30,8 +30,8 @@ Custom Script Extension for Windows allows you to execute Powershell scripts on 
 
 ### Pre-Requistes for running Custom Script Extension
 
-1. Install Azure PowerShell Cmdlets V0.8.0 or above from <a href="http://azure.microsoft.com/downloads" target="_blank">here</a>.
-2. If the scripts will be run on an existing VM, make sure VM Agent is enabled on the VM, if not follow this <a href="https://msdn.microsoft.com/library/azure/dn832621.aspx" target="_blank">article</a> to install one.
+1. Install Azure PowerShell Cmdlets V0.8.0 or above from <a href="http://azure.microsoft.com/en-us/downloads" target="_blank">here</a>.
+2. If the scripts will be run on an existing VM, make sure VM Agent is enabled on the VM, if not follow this <a href="https://msdn.microsoft.com/en-us/library/azure/dn832621.aspx" target="_blank">article</a> to install one.
 3. Upload the scripts that you want to run on the VM to Azure Storage. The scripts can come from a single or multiple storage containers.
 4. The script should be authored in such a way that the entry script which is launched by the extension in turn launches other scripts.
 
@@ -60,11 +60,13 @@ Note: This use case creates a new VM but the same operations can be done on an e
 This use case shows how to use a non-default storage either within the same subscription or in a different subscription for uploading scripts/files. Here we’ll use an existing VM but the same operations can be done while creating a new VM.
 
         Get-AzureVM -Name $name -ServiceName $servicename | Set-AzureVMCustomScriptExtension -StorageAccountName $storageaccount -StorageAccountKey $storagekey -ContainerName $container -FileName 'file1.ps1','file2.ps1' -Run 'file.ps1' | Update-AzureVM
-  ### Upload scripts to multiple containers across different storage accounts.
+### Upload scripts to multiple containers across different storage accounts.
   If the script files are stored across multiple containers, then currently to run those scripts, you have to provide the full SAS URL of these files.
 
       Get-AzureVM -Name $name -ServiceName $servicename | Set-AzureVMCustomScriptExtension -StorageAccountName $storageaccount -StorageAccountKey $storagekey -ContainerName $container -FileUri $fileUrl1, $fileUrl2 -Run 'file.ps1' | Update-AzureVM
 
+### Using Github location for downloading files.
+Starting with version 1.4, Github URLs can be specified as input location for downloading files. These should be public URLs. In future versions we will add support for private URLs. The file URLs can be specified using the '-FileUri' option as specified above.
 
 ### Add Custom Script Extension from the Portal.
 Browse to the Virtual Machine in the <a href="https://portal.azure.com/ " target="_blank">Azure Preview Portal </a> and add the Extension by specifying the script file to run.
@@ -76,9 +78,7 @@ Custom Script Extension can be uninstalled from the VM using the cmdlet below
 
       get-azureVM -ServiceName KPTRDemo -Name KPTRDemo | Set-AzureVMCustomScriptExtension -Uninstall | Update-AzureVM
 
-### Coming Soon
-
-We'll be soon adding Custom Script For Linux usage and samples, stay tuned.
+For Linux Custom Script Extension, please refer to the documentation <a href="http://azure.microsoft.com/en-us/documentation/articles/virtual-machines-linux-script-lamp/" target="_blank">here</a>.
 
 <!--Image references-->
 [5]: ./media/virtual-machines-extensions-customscript/addcse.png
